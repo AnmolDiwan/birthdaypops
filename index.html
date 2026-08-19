@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Pap! 🎂</title>
+  <meta name="description" content="A vintage Bollywood-themed birthday celebration for Pap on 20th August 2026.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- 0. Balloon Splash Screen -->
+  <div id="splash-screen">
+    <div class="splash-bg"></div>
+    <div class="splash-content">
+      <p class="splash-instruction">🎈 Pop all the balloons! 🎈</p>
+      <h1 class="splash-title">Happy Birthday<br><span class="splash-name">Papa</span></h1>
+      <p class="splash-counter">Balloons left: <span id="balloons-remaining">0</span></p>
+    </div>
+    <div id="balloon-container"></div>
+  </div>
+
+  <!-- 1. Hero Section -->
+  <section id="hero">
+    <canvas id="confetti-canvas"></canvas>
+    <div class="hero-border-frame"></div>
+    <div class="hero-content">
+      <p class="birthday-subtitle">✦ Happy Birthday ✦</p>
+      <h1 class="birthday-name">Pap</h1>
+      <p class="birthday-date">20th August 2026</p>
+      <div class="hero-decorative">
+        <span></span>
+        <i>✦</i>
+        <span></span>
+      </div>
+    </div>
+    <a href="#music-section" class="scroll-indicator" aria-label="Scroll down">
+      <span>Scroll Down</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </a>
+  </section>
+
+  <!-- 2. Music Player Section -->
+  <section id="music-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">His Favourite Tunes</h2>
+      <p class="section-subtitle">The songs that make him smile</p>
+    </div>
+    
+    <div class="player-container reveal">
+      <!-- Turntable -->
+      <div class="turntable-wrapper">
+        <div class="turntable">
+          <div class="vinyl-disc">
+            <div class="vinyl-label">
+              <div class="album-art-container">
+                <img src="images/album1.jpg" alt="Album Art" id="album-art">
+                <div class="album-art-fallback">♪</div>
+              </div>
+            </div>
+          </div>
+          <div class="tonearm-container">
+            <div class="tonearm">
+              <div class="tonearm-head"></div>
+            </div>
+          </div>
+          <!-- Music notes float out when playing -->
+          <div class="music-notes-container" id="music-notes"></div>
+        </div>
+      </div>
+      
+      <!-- Player Info -->
+      <div class="player-info">
+        <h3 id="song-title">Song No. 1</h3>
+        <p id="song-artist">Select a song to play</p>
+      </div>
+      
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div id="progress-bar">
+          <div id="progress-fill">
+            <div id="progress-handle"></div>
+          </div>
+        </div>
+        <div class="time-display">
+          <span id="current-time">0:00</span>
+          <span id="total-time">0:00</span>
+        </div>
+      </div>
+      
+      <!-- Controls -->
+      <div class="player-controls">
+        <button class="control-btn" id="prev-btn" aria-label="Previous song">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="control-btn" id="play-btn" aria-label="Play/Pause">
+          <svg class="play-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="pause-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="control-btn" id="next-btn" aria-label="Next song">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+      
+      <!-- Volume -->
+      <div class="volume-container">
+        <svg class="volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <input type="range" id="volume-slider" min="0" max="100" value="80" aria-label="Volume">
+      </div>
+      
+      <!-- Playlist -->
+      <div class="playlist-container">
+        <div class="playlist-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg>
+          <span>Playlist</span>
+        </div>
+        <!-- Playlist items generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Family Messages Section -->
+  <section id="messages-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Words from the Heart</h2>
+      <p class="section-subtitle">Messages from your loved ones</p>
+    </div>
+    
+    <div class="message-cards">
+      <!-- Card 1: Son/Daughter -->
+      <div class="message-card reveal" data-delay="0">
+        <div class="card-header">
+          <div class="photo-frame">
+            <img src="images/family1.jpg" alt="Photo">
+            <div class="photo-fallback">👤</div>
+          </div>
+          <h3 class="sender-name">Your Name</h3>
+          <span class="sender-relation">Son / Daughter</span>
+        </div>
+        <div class="message-text">
+          <p>Pap, you are the strongest person I know. Every lesson you've taught me, every sacrifice you've made — I carry it all in my heart. You've given me the world without ever asking for anything in return. Today is YOUR day, and I just want you to know: I'm so proud to be your child. Happy Birthday, Pap. May this year bring you all the joy you've given us a thousand times over. Love you more than words can say. ❤️</p>
+        </div>
+      </div>
+      
+      <!-- Card 2: Mom/Wife -->
+      <div class="message-card reveal" data-delay="200">
+        <div class="card-header">
+          <div class="photo-frame">
+            <img src="images/family2.jpg" alt="Photo">
+            <div class="photo-fallback">👤</div>
+          </div>
+          <h3 class="sender-name">Mom</h3>
+          <span class="sender-relation">Wife</span>
+        </div>
+        <div class="message-text">
+          <p>Happy Birthday to the man who has been my rock, my partner, and my best friend through all these years. From the early days of our journey together to watching our children grow — every moment with you has been a blessing. You make our house a home with your warmth and your laughter. Here's to many more years of love, togetherness, and your terrible jokes that somehow still make me smile. Happy Birthday, jaan. 💕</p>
+        </div>
+      </div>
+      
+      <!-- Card 3: Sister -->
+      <div class="message-card reveal" data-delay="400">
+        <div class="card-header">
+          <div class="photo-frame">
+            <img src="images/family3.jpg" alt="Photo">
+            <div class="photo-fallback">👤</div>
+          </div>
+          <h3 class="sender-name">Sister</h3>
+          <span class="sender-relation">Daughter</span>
+        </div>
+        <div class="message-text">
+          <p>Dear Pap, no one in this world can make me feel as safe as you do. You're my first hero and you always will be. Remember when you used to carry me on your shoulders? I still feel that tall whenever you're around. Thank you for believing in me, for cheering the loudest, and for always having the best advice (even when I pretend not to listen 😄). Happiest Birthday, Pap! Your little girl loves you forever. 🌸</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Photo Gallery Section -->
+  <section id="gallery-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Cherished Memories</h2>
+      <p class="section-subtitle">Moments frozen in time</p>
+    </div>
+    
+    <div class="polaroid-grid">
+      <!-- Polaroid 1 -->
+      <div class="polaroid reveal">
+        <div class="photo-wrapper">
+          <img src="images/memory1.jpg" alt="Memory">
+          <div class="photo-placeholder">📸</div>
+        </div>
+        <p class="caption">A Beautiful Memory</p>
+      </div>
+      <!-- Polaroid 2 -->
+      <div class="polaroid reveal">
+        <div class="photo-wrapper">
+          <img src="images/memory2.jpg" alt="Together Forever">
+          <div class="photo-placeholder">📸</div>
+        </div>
+        <p class="caption">Together Forever</p>
+      </div>
+      <!-- Polaroid 3 -->
+      <div class="polaroid reveal">
+        <div class="photo-wrapper">
+          <img src="images/memory3.jpg" alt="Golden Days">
+          <div class="photo-placeholder">📸</div>
+        </div>
+        <p class="caption">Golden Days</p>
+      </div>
+      <!-- Polaroid 4 -->
+      <div class="polaroid reveal">
+        <div class="photo-wrapper">
+          <img src="images/memory4.jpg" alt="Family Time">
+          <div class="photo-placeholder">📸</div>
+        </div>
+        <p class="caption">Family Time</p>
+      </div>
+      <!-- Polaroid 5 -->
+      <div class="polaroid reveal">
+        <div class="photo-wrapper">
+          <img src="images/memory5.jpg" alt="Celebrations">
+          <div class="photo-placeholder">📸</div>
+        </div>
+        <p class="caption">Celebrations</p>
+      </div>
+      <!-- Polaroid 6 -->
+      <div class="polaroid reveal">
+        <div class="photo-wrapper">
+          <img src="images/memory6.jpg" alt="Pure Joy">
+          <div class="photo-placeholder">📸</div>
+        </div>
+        <p class="caption">Pure Joy</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Footer -->
+  <footer id="footer">
+    <div class="film-strip"></div>
+    <div class="footer-content">
+      <p>Made with <span class="footer-heart">❤️</span> for Pap</p>
+      <p class="footer-year">© 2026 — A Birthday Gift with Love</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js" defer></script>
+</body>
+</html>
