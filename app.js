@@ -596,8 +596,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, index * 200 + 100); // staggered delay
   });
 
-  // --- 9. Image Error Handling ---
+  // --- 9. Image Error Handling (skip lightbox img which starts with empty src) ---
   document.querySelectorAll('img').forEach(img => {
+    if (img.id === 'lb-img') return; // lightbox image — never hide this
     img.addEventListener('error', function() {
       this.style.opacity = '0';
       this.style.position = 'absolute';
@@ -608,57 +609,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- 10. Photo Lightbox ---
-  const lightbox      = document.getElementById('lightbox');
-  const lightboxImg   = document.getElementById('lightbox-img');
-  const lightboxClose = document.getElementById('lightbox-close');
+  // --- 10. Photo Gallery Lightbox (rebuilt) ---
+  (function () {
+    const overlay = document.getElementById('lb-overlay');
+    const panel   = document.getElementById('lb-panel');
+    const img     = document.getElementById('lb-img');
+    const caption = document.getElementById('lb-caption');
+    const closeBtn = document.getElementById('lb-close');
 
-  const openLightbox = (src, alt) => {
-    if (!lightbox || !lightboxImg || !src) return;
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || 'Photo';
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
+    if (!overlay || !img) return;
 
-  const closeLightbox = () => {
-    if (!lightbox) return;
-    lightbox.classList.remove('open');
-    document.body.style.overflow = '';
-  };
+    function openLB(src, cap) {
+      // Reset any styles that may have been applied by the error handler
+      img.style.opacity = '';
+      img.style.position = '';
+      img.src = src;
+      caption.textContent = cap || '';
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
 
-  // Attach click handler to every polaroid — grab src directly from the img element
-  document.querySelectorAll('.polaroid').forEach(polaroid => {
-    const img = polaroid.querySelector('.photo-wrapper img');
-    if (!img) return;
+    function closeLB() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      // Clear src after transition so old image doesn't flash next time
+      setTimeout(() => { img.src = ''; }, 300);
+    }
 
-    // Store the original src as a data attribute right now (before any error handler touches it)
-    const originalSrc = img.getAttribute('src');
-    polaroid.setAttribute('data-lightbox-src', originalSrc);
-    polaroid.setAttribute('data-lightbox-alt', img.getAttribute('alt') || '');
-    polaroid.style.cursor = 'zoom-in';
-
-    polaroid.addEventListener('click', () => {
-      const src = polaroid.getAttribute('data-lightbox-src');
-      const alt = polaroid.getAttribute('data-lightbox-alt');
-      openLightbox(src, alt);
+    // Each polaroid opens the lightbox on click
+    document.querySelectorAll('.polaroid[data-src]').forEach(function (card) {
+      card.style.cursor = 'zoom-in';
+      card.addEventListener('click', function () {
+        openLB(card.dataset.src, card.dataset.caption);
+      });
     });
-  });
 
-  // Close handlers
-  if (lightboxClose) lightboxClose.addEventListener('click', (e) => {
-    e.stopPropagation();
-    closeLightbox();
-  });
-
-  if (lightbox) {
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
+    // Clicking the dark overlay backdrop closes it
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeLB();
     });
-  }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
-  });
+    // Clicks inside the panel (on image/caption/close) must NOT bubble to overlay
+    if (panel) {
+      panel.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+    }
+
+    // Dedicated close button
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeLB);
+    }
+
+    // Keyboard close
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeLB();
+    });
+  })();
 
 });

@@ -201,53 +201,41 @@
       <h2 class="section-title">Cherished Memories</h2>
       <p class="section-subtitle">Moments frozen in time</p>
     </div>
-    
+
     <div class="polaroid-grid">
-      <!-- Polaroid 1 -->
-      <div class="polaroid reveal">
+      <div class="polaroid reveal" data-src="images/beautiful-memory.jpeg" data-caption="A Beautiful Memory">
         <div class="photo-wrapper">
-          <img src="images/beautiful-memory.jpeg" alt="A Beautiful Memory">
-          <div class="photo-placeholder">📸</div>
+          <img src="images/beautiful-memory.jpeg" alt="A Beautiful Memory" draggable="false">
         </div>
         <p class="caption">A Beautiful Memory</p>
       </div>
-      <!-- Polaroid 2 -->
-      <div class="polaroid reveal">
+      <div class="polaroid reveal" data-src="images/together-forever.jpeg" data-caption="Together Forever">
         <div class="photo-wrapper">
-          <img src="images/together-forever.jpeg" alt="Together Forever">
-          <div class="photo-placeholder">📸</div>
+          <img src="images/together-forever.jpeg" alt="Together Forever" draggable="false">
         </div>
         <p class="caption">Together Forever</p>
       </div>
-      <!-- Polaroid 3 -->
-      <div class="polaroid reveal">
+      <div class="polaroid reveal" data-src="images/golden-days.jpeg" data-caption="Golden Days">
         <div class="photo-wrapper">
-          <img src="images/golden-days.jpeg" alt="Golden Days">
-          <div class="photo-placeholder">📸</div>
+          <img src="images/golden-days.jpeg" alt="Golden Days" draggable="false">
         </div>
         <p class="caption">Golden Days</p>
       </div>
-      <!-- Polaroid 4 -->
-      <div class="polaroid reveal">
+      <div class="polaroid reveal" data-src="images/family-time.jpeg" data-caption="Family Time">
         <div class="photo-wrapper">
-          <img src="images/family-time.jpeg" alt="Family Time">
-          <div class="photo-placeholder">📸</div>
+          <img src="images/family-time.jpeg" alt="Family Time" draggable="false">
         </div>
         <p class="caption">Family Time</p>
       </div>
-      <!-- Polaroid 5 -->
-      <div class="polaroid reveal">
+      <div class="polaroid reveal" data-src="images/celebrations.jpeg" data-caption="Celebrations">
         <div class="photo-wrapper">
-          <img src="images/celebrations.jpeg" alt="Celebrations">
-          <div class="photo-placeholder">📸</div>
+          <img src="images/celebrations.jpeg" alt="Celebrations" draggable="false">
         </div>
         <p class="caption">Celebrations</p>
       </div>
-      <!-- Polaroid 6 -->
-      <div class="polaroid reveal">
+      <div class="polaroid reveal" data-src="images/pure-joy.jpeg" data-caption="Pure Joy">
         <div class="photo-wrapper">
-          <img src="images/pure-joy.jpeg" alt="Pure Joy">
-          <div class="photo-placeholder">📸</div>
+          <img src="images/pure-joy.jpeg" alt="Pure Joy" draggable="false">
         </div>
         <p class="caption">Pure Joy</p>
       </div>
@@ -264,9 +252,12 @@
   </footer>
 
   <!-- Lightbox for photo gallery -->
-  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
-    <button id="lightbox-close" aria-label="Close">&times;</button>
-    <img id="lightbox-img" src="" alt="Full size photo">
+  <div id="lb-overlay">
+    <div id="lb-panel">
+      <button id="lb-close" aria-label="Close photo">&#10005;</button>
+      <img id="lb-img" src="" alt="">
+      <p id="lb-caption"></p>
+    </div>
   </div>
 
   <!-- Scripts -->
