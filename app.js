@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prevent background scrolling while splash is active
     document.body.style.overflow = 'hidden';
 
-    const TOTAL_BALLOONS = 25;
+    const TOTAL_BALLOONS = 10;
     let balloonsRemaining = TOTAL_BALLOONS;
 
     // Festive balloon colors
@@ -269,50 +269,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 2. & 7. Music Player & Dynamic Playlist ---
   const playlist = [
-    { title: 'Song No. 1', artist: 'Artist', file: 'songs/song1.mp3' },
-    { title: 'Song No. 2', artist: 'Artist', file: 'songs/song2.mp3' },
-    { title: 'Song No. 3', artist: 'Artist', file: 'songs/song3.mp3' },
-    { title: 'Song No. 4', artist: 'Artist', file: 'songs/song4.mp3' },
-    { title: 'Song No. 5', artist: 'Artist', file: 'songs/song5.mp3' },
-    { title: 'Song No. 6', artist: 'Artist', file: 'songs/song6.mp3' },
-    { title: 'Song No. 7', artist: 'Artist', file: 'songs/song7.mp3' },
-    { title: 'Song No. 8', artist: 'Artist', file: 'songs/song8.mp3' },
-    { title: 'Song No. 9', artist: 'Artist', file: 'songs/song9.mp3' },
-    { title: 'Song No. 10', artist: 'Artist', file: 'songs/song10.mp3' },
+    { title: 'Happy Birthday To You',      artist: 'Special',                        file: 'songs/Happy Birthday To You.mp3' },
+    { title: 'Chala Jata Hoon',            artist: 'Kishore Kumar',                  file: 'songs/Chala Jata Hoon (HD)  Mere Jeevan Saathi (1972)  Rajesh Khanna, Tanuja  Kishore Kumar  RD Burman.mp3' },
+    { title: 'Chura Liya Hai Tumne',       artist: 'Asha Bhosle, Mohammed Rafi',     file: 'songs/Chura Liya Hai Tumne Jo Dil Ko -  Yaadon Ki Baaraat  Zeenat Aman, Vijay Arora.mp3' },
+    { title: 'Hum Bane Tum Bane',          artist: 'Lata Mangeshkar, S.P. Balasubrahmanyam', file: 'songs/Hum Bane Tum Bane Ek Duje Ke Liye 4K Song ( हम बन तम बन ) Lata & SPB  Kamal Haasan, Rati.mp3' },
+    { title: 'Itna Na Mujhse Tu Pyar Badha', artist: 'Lata Mangeshkar, Talat Mahmood', file: 'songs/Itna Na Mujhse Tu Pyar Badha  Lata Mangeshkar  Talat Mahmood  Asha P  Chhaya  Old Hindi Songs.mp3' },
+    { title: 'Jaane Kya Dhoonta Hai',      artist: 'Lucky Ali',                      file: 'songs/Jaane Kya Dhoonta Hai 4K Video Song  Sur_ The Melody Of Life  Lucky Ali, Gauri Karnik  Musical.mp3' },
+    { title: 'Kis Liye Maine Pyaar Kiya',  artist: 'Lata Mangeshkar',                file: 'songs/Kis Liye Maine Pyaar Kiya  The Train (1970)  Rajesh Khanna, Nanda  Lata Mangeshkar.mp3' },
+    { title: 'Gulmohar Gar Tumhara Naam',  artist: 'Kishore Kumar, Lata Mangeshkar', file: 'songs/Kishore Kumar & Lata Mangeshkar - Gulmohar Gar Tumhara Naam Hota (HD)  Rakesh Roshan  Devta 1956.mp3' },
+    { title: 'Lekar Hum Deewana Dil',      artist: 'Kishore Kumar',                  file: 'songs/Lekar Hum Deewana Dil.mp3' },
+    { title: 'Meri Bheegi Bheegi Si',      artist: 'Kishore Kumar',                  file: 'songs/MERI BHEEGI BHEEGI SI (Anamika Tu Bhi Tarse) 4K - Kishore Kumar Sad Song - Sanjeev K, Jaya BAnamika.mp3' },
+    { title: 'Neele Neele Ambar Par',      artist: 'Kishore Kumar',                  file: 'songs/Neele Neele Ambar Par - Male Version Lyric Video - KalaakaarSrideviKishore Kumar.mp3' },
+    { title: 'O Mere Dil Ke Chain',        artist: 'Kishore Kumar',                  file: 'songs/O Mere Dil Ke Chain  Mere Jeevan Saathi (1972)  Rajesh Khanna, Tanuja  R.D Burman  Kishore Kumar.mp3' },
+    { title: 'Panna Ki Tamanna Hai',       artist: 'Deepshikha Raina',               file: 'songs/Panna Ki Tamanna Hai  Recreation  Deepshikha Raina  Anurag-Abhishek  Heera Panna Songs.mp3' },
+    { title: 'Tere Mere Milan Ki Yeh Raina', artist: 'Kishore Kumar, Lata Mangeshkar', file: 'songs/Tere Mere Milan Ki Yeh Rainaa  Kishore Kumar Hit Songs  Lata Mangeshkar  Amitabh  Abhimaan(1973).mp3' },
+    { title: 'Yeh Shaam Mastani',          artist: 'Kishore Kumar',                  file: 'songs/Yeh Shaam Mastani 4K  Kishore Kumar  Rajesh Khanna  Kati Patang  Classic Bollywood 4K Video Song.mp3' },
   ];
 
   let currentSongIndex = 0;
+  let isShuffled = false;
+  let shuffleOrder = []; // holds shuffled indices when shuffle is on
   const audio = new Audio();
+  audio.preload = 'auto';
   let isPlaying = false;
 
   // DOM Elements
-  const playBtn = document.getElementById('play-btn');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const songTitle = document.getElementById('song-title');
-  const songArtist = document.getElementById('song-artist');
-  const progressBar = document.getElementById('progress-bar');
+  const playBtn      = document.getElementById('play-btn');
+  const prevBtn      = document.getElementById('prev-btn');
+  const nextBtn      = document.getElementById('next-btn');
+  const shuffleBtn   = document.getElementById('shuffle-btn');
+  const songTitle    = document.getElementById('song-title');
+  const songArtist   = document.getElementById('song-artist');
+  const progressBar  = document.getElementById('progress-bar');
   const progressFill = document.getElementById('progress-fill');
   const currentTimeDisplay = document.getElementById('current-time');
-  const totalTimeDisplay = document.getElementById('total-time');
+  const totalTimeDisplay   = document.getElementById('total-time');
   const volumeSlider = document.getElementById('volume-slider');
-  const vinylDisc = document.querySelector('.vinyl-disc');
-  const tonearm = document.querySelector('.tonearm');
-  const albumArt = document.querySelector('.album-art-container img');
+  const vinylDisc    = document.querySelector('.vinyl-disc');
+  const tonearm      = document.querySelector('.tonearm');
+  const albumArt     = document.querySelector('.album-art-container img');
   const playlistContainer = document.querySelector('.playlist-container');
 
   // Format time (seconds -> MM:SS)
   const formatTime = (seconds) => {
-    if (isNaN(seconds)) return '00:00';
+    if (isNaN(seconds) || !isFinite(seconds)) return '00:00';
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Build a fresh shuffle order excluding the current song
+  const buildShuffleOrder = () => {
+    const indices = playlist.map((_, i) => i).filter(i => i !== currentSongIndex);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    shuffleOrder = indices;
+  };
+
+  // Get the next song index based on shuffle state
+  const getNextIndex = () => {
+    if (isShuffled) {
+      if (shuffleOrder.length === 0) buildShuffleOrder();
+      return shuffleOrder.shift();
+    }
+    return (currentSongIndex + 1) % playlist.length;
+  };
+
+  const getPrevIndex = () => {
+    if (isShuffled) {
+      buildShuffleOrder(); // just go random on prev too
+      return shuffleOrder.shift();
+    }
+    return (currentSongIndex - 1 + playlist.length) % playlist.length;
+  };
+
   // Generate Playlist DOM
-  const playlistHeader = playlistContainer ? playlistContainer.querySelector('.playlist-header') : null;
   if (playlistContainer) {
-    // Remove any existing playlist items but keep the header
     const existingItems = playlistContainer.querySelectorAll('.playlist-item');
     existingItems.forEach(item => item.remove());
 
@@ -327,89 +361,79 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       playlistContainer.appendChild(item);
 
-      // --- 5. Playlist Item Click ---
       item.addEventListener('click', () => {
         currentSongIndex = i;
-        loadSong(currentSongIndex);
-        audio.play().then(() => {
-          isPlaying = true;
-          updatePlayState();
-        }).catch(e => console.error('Audio play error:', e));
+        if (isShuffled) buildShuffleOrder();
+        loadAndPlay(currentSongIndex);
       });
     });
   }
 
   const updatePlaylistHighlight = () => {
-    const items = document.querySelectorAll('.playlist-item');
-    items.forEach((item, index) => {
-      if (index === currentSongIndex) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
+    document.querySelectorAll('.playlist-item').forEach((item, index) => {
+      item.classList.toggle('active', index === currentSongIndex);
     });
+    // Scroll active item into view
+    const activeItem = document.querySelector('.playlist-item.active');
+    if (activeItem) activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   };
 
   const loadSong = (index) => {
     if (index < 0 || index >= playlist.length) return;
-    
     const song = playlist[index];
     audio.src = song.file;
-    
-    if (songTitle) songTitle.textContent = song.title;
+    if (songTitle)  songTitle.textContent  = song.title;
     if (songArtist) songArtist.textContent = song.artist;
-    
-    // Update album art with fallback
-    if (albumArt) {
-      const imgSrc = `images/album${index + 1}.jpg`;
-      albumArt.src = imgSrc;
-      
-      // --- 8. Album Art Fallback ---
-      albumArt.onerror = () => {
-        // Create a fallback visually or replace src with a placeholder
-        // Using a basic embedded SVG data URI as fallback
-        albumArt.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23DAA520"/><stop offset="100%" stop-color="%238B6508"/></linearGradient></defs><rect width="100" height="100" fill="url(%23g)"/><text x="50" y="55" font-size="40" text-anchor="middle" fill="white">🎵</text></svg>';
-      };
-    }
 
+    // Album art fallback SVG
+    if (albumArt) {
+      const fallbackSVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%25" stop-color="%23DAA520"/><stop offset="100%25" stop-color="%238B6508"/></linearGradient></defs><rect width="100" height="100" fill="url(%23g)"/><text x="50" y="60" font-size="40" text-anchor="middle" fill="white">♪</text></svg>';
+      albumArt.src = fallbackSVG; // default to fallback
+      albumArt.onerror = () => { albumArt.src = fallbackSVG; };
+    }
     updatePlaylistHighlight();
+  };
+
+  // Load and immediately play
+  const loadAndPlay = (index) => {
+    loadSong(index);
+    audio.play().catch(e => console.warn('Autoplay blocked:', e));
   };
 
   const updatePlayState = () => {
     if (playBtn) {
-      const playIcon = playBtn.querySelector('.play-icon');
+      const playIcon  = playBtn.querySelector('.play-icon');
       const pauseIcon = playBtn.querySelector('.pause-icon');
       if (playIcon && pauseIcon) {
-        playIcon.style.display = isPlaying ? 'none' : 'inline-block';
+        playIcon.style.display  = isPlaying ? 'none' : 'inline-block';
         pauseIcon.style.display = isPlaying ? 'inline-block' : 'none';
       }
     }
-    if (vinylDisc) {
-      if (isPlaying) vinylDisc.classList.add('spinning');
-      else vinylDisc.classList.remove('spinning');
-    }
-    if (tonearm) {
-      if (isPlaying) tonearm.classList.add('playing');
-      else tonearm.classList.remove('playing');
-    }
+    if (vinylDisc) vinylDisc.classList.toggle('spinning', isPlaying);
+    if (tonearm)   tonearm.classList.toggle('playing', isPlaying);
   };
 
   const togglePlay = () => {
-    if (!audio.src) loadSong(currentSongIndex);
-    
+    if (!audio.src || audio.src === window.location.href) loadSong(currentSongIndex);
     if (isPlaying) {
       audio.pause();
     } else {
-      audio.play().catch(e => {
-        console.error("Playback failed", e);
-      });
+      audio.play().catch(e => console.error('Playback failed:', e));
     }
   };
 
-  // Event Listeners for Player Controls
-  if (playBtn) {
-    playBtn.addEventListener('click', togglePlay);
+  // Shuffle toggle
+  if (shuffleBtn) {
+    shuffleBtn.addEventListener('click', () => {
+      isShuffled = !isShuffled;
+      shuffleBtn.style.color  = isShuffled ? 'var(--gold-light)' : '';
+      shuffleBtn.style.borderColor = isShuffled ? 'var(--gold-light)' : '';
+      shuffleBtn.title = isShuffled ? 'Shuffle: ON' : 'Shuffle: OFF';
+      if (isShuffled) buildShuffleOrder();
+    });
   }
+
+  if (playBtn) playBtn.addEventListener('click', togglePlay);
 
   audio.addEventListener('play', () => {
     isPlaying = true;
@@ -423,29 +447,37 @@ document.addEventListener('DOMContentLoaded', () => {
     stopMusicNotes();
   });
 
+  // Continuous autoplay — always move to next song on end
+  audio.addEventListener('ended', () => {
+    currentSongIndex = getNextIndex();
+    loadAndPlay(currentSongIndex);
+  });
+
   const nextSong = () => {
-    currentSongIndex = (currentSongIndex + 1) % playlist.length;
+    currentSongIndex = getNextIndex();
     loadSong(currentSongIndex);
     if (isPlaying) audio.play().catch(e => console.error(e));
   };
 
   const prevSong = () => {
-    currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
-    loadSong(currentSongIndex);
-    if (isPlaying) audio.play().catch(e => console.error(e));
+    // If more than 3s in, restart current song; else go to prev
+    if (audio.currentTime > 3) {
+      audio.currentTime = 0;
+    } else {
+      currentSongIndex = getPrevIndex();
+      loadSong(currentSongIndex);
+      if (isPlaying) audio.play().catch(e => console.error(e));
+    }
   };
 
   if (nextBtn) nextBtn.addEventListener('click', nextSong);
   if (prevBtn) prevBtn.addEventListener('click', prevSong);
 
-  // Auto-play next song
-  audio.addEventListener('ended', nextSong);
-
   // Time update
   audio.addEventListener('timeupdate', () => {
     if (audio.duration) {
-      const progressPercent = (audio.currentTime / audio.duration) * 100;
-      if (progressFill) progressFill.style.width = `${progressPercent}%`;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      if (progressFill) progressFill.style.width = `${pct}%`;
       if (currentTimeDisplay) currentTimeDisplay.textContent = formatTime(audio.currentTime);
     }
   });
@@ -457,12 +489,48 @@ document.addEventListener('DOMContentLoaded', () => {
   // Progress Bar Seek
   if (progressBar) {
     progressBar.addEventListener('click', (e) => {
-      const rect = progressBar.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const width = rect.width;
-      const percent = clickX / width;
-      audio.currentTime = percent * audio.duration;
+      const rect    = progressBar.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      if (audio.duration) audio.currentTime = percent * audio.duration;
     });
+  }
+
+  // Volume Slider
+  if (volumeSlider) {
+    volumeSlider.addEventListener('input', (e) => {
+      audio.volume = e.target.value / 100;
+    });
+    audio.volume = (volumeSlider.value || 80) / 100;
+  }
+
+  // Init: load first song (Happy Birthday) and autoplay
+  loadSong(currentSongIndex);
+  // Autoplay on hero — triggered as soon as splash is dismissed or page loads
+  const tryAutoplay = () => {
+    audio.play().catch(() => {
+      // Autoplay blocked by browser — wait for first user interaction
+      const startOnInteraction = () => {
+        audio.play().catch(() => {});
+        document.removeEventListener('click', startOnInteraction);
+        document.removeEventListener('keydown', startOnInteraction);
+      };
+      document.addEventListener('click', startOnInteraction);
+      document.addEventListener('keydown', startOnInteraction);
+    });
+  };
+
+  // If splash screen exists, start after it's dismissed; else start immediately
+  if (splashScreen) {
+    // Watch for splash removal
+    const splashObserver = new MutationObserver(() => {
+      if (!document.getElementById('splash-screen')) {
+        splashObserver.disconnect();
+        setTimeout(tryAutoplay, 600);
+      }
+    });
+    splashObserver.observe(document.body, { childList: true });
+  } else {
+    tryAutoplay();
   }
 
   // Volume Slider
@@ -529,17 +597,68 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- 9. Image Error Handling ---
-  // Handle broken images gracefully by hiding them to reveal fallback elements
   document.querySelectorAll('img').forEach(img => {
     img.addEventListener('error', function() {
       this.style.opacity = '0';
       this.style.position = 'absolute';
     });
-    // If image is already broken (cached error)
     if (img.complete && img.naturalWidth === 0) {
       img.style.opacity = '0';
       img.style.position = 'absolute';
     }
+  });
+
+  // --- 10. Photo Lightbox ---
+  const lightbox      = document.getElementById('lightbox');
+  const lightboxImg   = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  const openLightbox = (src, alt) => {
+    if (!lightbox || !lightboxImg || !src) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || 'Photo';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    if (!lightbox) return;
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // Attach click handler to every polaroid — grab src directly from the img element
+  document.querySelectorAll('.polaroid').forEach(polaroid => {
+    const img = polaroid.querySelector('.photo-wrapper img');
+    if (!img) return;
+
+    // Store the original src as a data attribute right now (before any error handler touches it)
+    const originalSrc = img.getAttribute('src');
+    polaroid.setAttribute('data-lightbox-src', originalSrc);
+    polaroid.setAttribute('data-lightbox-alt', img.getAttribute('alt') || '');
+    polaroid.style.cursor = 'zoom-in';
+
+    polaroid.addEventListener('click', () => {
+      const src = polaroid.getAttribute('data-lightbox-src');
+      const alt = polaroid.getAttribute('data-lightbox-alt');
+      openLightbox(src, alt);
+    });
+  });
+
+  // Close handlers
+  if (lightboxClose) lightboxClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeLightbox();
+  });
+
+  if (lightbox) {
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
   });
 
 });
